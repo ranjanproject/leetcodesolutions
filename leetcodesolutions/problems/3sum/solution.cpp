@@ -1,38 +1,86 @@
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        
-        vector<vector<int> >a;
-        if(nums.size()<3)return a;
-        vector<int> b;
-        set<vector<int> > s;
-        sort(nums.begin(),nums.end());
-        int i,j,k,sm;
-        sm = 0;
-        for(i=0;i<nums.size()-2;i++){
-            j=i+1;
-            k = nums.size()-1;
-            while(k>j){
-               sm = nums[i]+nums[k]+nums[j];
-                // cout<<sm<<endl;
-               if((sm)==0){
-                    // cout<<nums[i]<<" "<<nums[j]<<" "<<nums[k]<<endl;
-                    b.push_back(nums[i]);
-                    b.push_back(nums[j]);
-                    b.push_back(nums[k]);
-                    s.insert(b);
-                    b.clear();
-                   j++;
-                }
-              else if(sm>0)k--;
-              else j++;
+        vector<vector<int>> v;
+        set<vector<int>> st;
+        sort(nums.begin(), nums.end());
+
+        int pi = 0;
+        for(int i = 0; i<nums.size(); i++){
+           if(nums[i]>=0){
+               pi = i;
+               break;
+           }
+        }
+
+        //  cout<<pi<<endk;
+        //check one negative and two positives
+       
+
+        for(int i = 0; i<pi; i++){
+           int lp =pi, rp = nums.size() - 1;
+            while(lp<rp){
+              long long sum =   nums[i] + nums[lp] + nums[rp];
+              vector<int> a;
+              if(sum < 0){
+                 lp++;
+              }else if(sum == 0){
+                 a.push_back(nums[i]);
+                 a.push_back(nums[lp]);
+                 a.push_back(nums[rp]);
+                 lp++;
+              }else{
+                rp--;
+              }
+
+              if(a.size()!=0){
+                  st.insert(a);
+              }
             }
         }
-        set<vector<int> > :: iterator it;
-        
-        for(it=s.begin();it!=s.end();it++){
-            a.push_back(*it);
+
+        //check two negative and one positives
+       
+         for(int i = pi; i<nums.size(); i++){
+            int lne = 0, rne = pi - 1;
+            while(lne<rne){
+              long long sum =   nums[i] + nums[lne] + nums[rne];
+
+              vector<int> a;
+              if(sum < 0){
+                 lne++;
+              }else if(sum == 0){
+                 a.push_back(nums[i]);
+                 a.push_back(nums[lne]);
+                 a.push_back(nums[rne]);
+                 lne++;
+              }else{
+                rne--;
+              }
+
+              if(a.size()!= 0){
+                  st.insert(a);
+              }
+            }
         }
-        return a;
+
+       if(nums[pi]==0){
+         vector<int> a;
+         for(int i = pi; i < nums.size(); i++){   
+            if(nums[i]!=0)break;
+            a.push_back(nums[i]);
+            if(a.size()==3){
+              v.push_back(a);
+              a.clear();
+              break;
+            }
+         }
+       }
+
+   for (auto itr : st)
+  {
+     v.push_back(itr);
+  }
+        return v;
     }
 };
